@@ -1,6 +1,6 @@
 {
-    "name": "hangman_co",
-    "short_name": "hangman_co",
+    "name": "hangman",
+    "short_name": "hangman",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
