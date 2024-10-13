@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hangman/const/consts.dart';
 import 'package:hangman/game/figure_widget.dart';
 import 'package:hangman/game/hidden_letter.dart';
+import 'package:hangman/main.dart';
+
+
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -12,9 +17,12 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   var characters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
-  var word = "palabra".toUpperCase();
+  var word = palabras[Random().nextInt(palabras.length)].toUpperCase();
   List<String> selectedChar = [];
   var tries = 0;
+  
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +86,16 @@ class _GameScreenState extends State<GameScreen> {
                     if(!word.split("").contains(e.toUpperCase())){
                       tries++;
                     }
-                  });
+                     if (tries >= 6) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const HomeScreen(),
+                                    ),
+                                );
+                              }
+                            }
+                          ) ;
                 },
                  child: Text(
                   e,

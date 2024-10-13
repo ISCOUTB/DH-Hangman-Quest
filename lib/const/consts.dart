@@ -15,3 +15,7 @@ class GameUI {
   static const rightLeg = "assets/r_leg.png";
 
 }
+
+const List<String> palabras = [
+  "perro", "gato", "carro", "puerta", "ventana", "manzana", "computadora", "programacion", "flutter", "dart"
+];
