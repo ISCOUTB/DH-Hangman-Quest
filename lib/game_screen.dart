@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hangman/const/consts.dart';
 import 'package:hangman/game/figure_widget.dart';
 import 'package:hangman/game/hidden_letter.dart';
-import 'package:hangman/main.dart';
-import 'dart:convert';
-import 'package:flutter/services.dart';
+
 
 
 class GameScreen extends StatefulWidget {
@@ -22,34 +20,39 @@ class _GameScreenState extends State<GameScreen> {
   List<String> selectedChar = [];
   var tries = 0;
 
-  // Función para verificar si se adivinó la palabra
+  //se adivinó la palabra
   bool isWordGuessed() {
     return word.split("").every((letter) => selectedChar.contains(letter));
   }
 
-  // Función para mostrar el diálogo al adivinar la palabra
+  //diálogo al adivinar la palabra
   void showWinDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("¡Felicidades!"),
-        content: const Text("Has adivinado la palabra."),
+      barrierDismissible: false,
+      // ignore: deprecated_member_use
+      builder: (context) => WillPopScope(
+        onWillPop: () async => false,
+         child: AlertDialog(
+        title: const Text("¡Correcto!"),
+        content: Text("La palabra es: $word"),
         actions: [
           TextButton(
             onPressed: () {
               setState(() {
-                // Reinicia el juego
+                // reinicia el juego
                 word = palabrasCombinadas[Random().nextInt(palabrasCombinadas.length)].toUpperCase();
                 selectedChar.clear();
                 tries = 0;
               });
-              Navigator.of(context).pop(); // Cierra el diálogo
+              Navigator.of(context).pop(); // cierra el diálogo
             },
             child: const Text("Volver a jugar"),
           ),
         ],
       ),
-    );
+    ),
+  );
   }
 
   @override
@@ -104,7 +107,7 @@ class _GameScreenState extends State<GameScreen> {
               child: GridView.count(
                 crossAxisSpacing: 4,
                 mainAxisSpacing: 4,
-                crossAxisCount: 7,
+                crossAxisCount: 5,
                 children: characters.split("").map((e) {
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: AppColors.bgColor),
@@ -117,10 +120,31 @@ class _GameScreenState extends State<GameScreen> {
                                 tries++;
                               }
                               if (tries >= 6) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                                );
+                                    showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) => WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: AlertDialog(
+                                        title: const Text("Ahogado"),
+                                        content: const Text("No tienes más intentos."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                // reinicia el juego
+                                                word = palabrasCombinadas[Random().nextInt(palabrasCombinadas.length)].toUpperCase();
+                                                selectedChar.clear();
+                                                tries = 0;
+                                              });
+                                              Navigator.of(context).pop(); // cierra el diálogo
+                                            },
+                                            child: const Text("Volver a jugar"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
                               } else if (isWordGuessed()) {
                                 showWinDialog();
                               }

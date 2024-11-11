@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
-      home: const HomeScreen(), // Pantalla inicial es ahora HomeScreen
+      home: const HomeScreen(),
     );
   }
 }
