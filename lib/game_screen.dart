@@ -5,7 +5,8 @@ import 'package:hangman/const/consts.dart';
 import 'package:hangman/game/figure_widget.dart';
 import 'package:hangman/game/hidden_letter.dart';
 import 'package:hangman/main.dart';
-
+import 'dart:convert';
+import 'package:flutter/services.dart';
 
 
 class GameScreen extends StatefulWidget {
@@ -16,13 +17,40 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  var characters = "abcdefghijklmnopqrstuvwxyz".toUpperCase();
-  var word = palabras[Random().nextInt(palabras.length)].toUpperCase();
+  var characters = "abcdefghijklmnñopqrstuvwxyz".toUpperCase();
+  var word = palabrasCombinadas[Random().nextInt(palabrasCombinadas.length)].toUpperCase();
   List<String> selectedChar = [];
   var tries = 0;
-  
 
-  
+  // Función para verificar si se adivinó la palabra
+  bool isWordGuessed() {
+    return word.split("").every((letter) => selectedChar.contains(letter));
+  }
+
+  // Función para mostrar el diálogo al adivinar la palabra
+  void showWinDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("¡Felicidades!"),
+        content: const Text("Has adivinado la palabra."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                // Reinicia el juego
+                word = palabrasCombinadas[Random().nextInt(palabrasCombinadas.length)].toUpperCase();
+                selectedChar.clear();
+                tries = 0;
+              });
+              Navigator.of(context).pop(); // Cierra el diálogo
+            },
+            child: const Text("Volver a jugar"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,70 +68,73 @@ class _GameScreenState extends State<GameScreen> {
             child: Column(
               children: [
                 Expanded(
-                  flex: 4 ,
+                  flex: 4,
                   child: Stack(
                     children: [
-                      figure(GameUI.hang, tries >=0),
-                      figure(GameUI.head, tries >=1),
-                      figure(GameUI.body, tries >=2),
-                      figure(GameUI.leftArm, tries >=3),
-                      figure(GameUI.rightArm, tries >=4),
-                      figure(GameUI.leftLeg, tries >=5),
-                      figure(GameUI.rightLeg, tries >=6)
-                    ] 
-                    ),
+                      figure(GameUI.hang, tries >= 0),
+                      figure(GameUI.head, tries >= 1),
+                      figure(GameUI.body, tries >= 2),
+                      figure(GameUI.leftArm, tries >= 3),
+                      figure(GameUI.rightArm, tries >= 4),
+                      figure(GameUI.leftLeg, tries >= 5),
+                      figure(GameUI.rightLeg, tries >= 6),
+                    ],
                   ),
-                Expanded(
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Container(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: word.split("").map(
-                        (e) => hiddenLetter(e, !selectedChar.contains(e.toUpperCase())),
-                      ).toList(),
-                    )
+                      children: word
+                          .split("")
+                          .map((e) => hiddenLetter(e, !selectedChar.contains(e.toUpperCase())))
+                          .toList(),
                     ),
-                  )
+                  ),
+                )
               ],
-            ) 
             ),
+          ),
           Expanded(
             flex: 2,
             child: Container(
-            padding: const EdgeInsets.all(8.0),
-             child: GridView.count(
-              crossAxisSpacing: 4,
-             mainAxisSpacing: 4,
-             crossAxisCount: 7,
-             children: characters.split("").map((e){
-              return ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.bgColor
-                ),
-                onPressed: selectedChar.contains(e.toUpperCase()) ? null :() {
-                  setState(() {
-                    selectedChar.add(e.toUpperCase());
-                    if(!word.split("").contains(e.toUpperCase())){
-                      tries++;
-                    }
-                     if (tries >= 6) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const HomeScreen(),
-                                    ),
-                                );
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.count(
+                crossAxisSpacing: 4,
+                mainAxisSpacing: 4,
+                crossAxisCount: 7,
+                children: characters.split("").map((e) {
+                  return ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.bgColor),
+                    onPressed: selectedChar.contains(e.toUpperCase())
+                        ? null
+                        : () {
+                            setState(() {
+                              selectedChar.add(e.toUpperCase());
+                              if (!word.split("").contains(e.toUpperCase())) {
+                                tries++;
                               }
-                            }
-                          ) ;
-                },
-                 child: Text(
-                  e,
-                  style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                 ),
-                 );
-             }).toList(),),
-              ))
+                              if (tries >= 6) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                                );
+                              } else if (isWordGuessed()) {
+                                showWinDialog();
+                              }
+                            });
+                          },
+                    child: Text(
+                      e,
+                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
         ],
       ),
     );
