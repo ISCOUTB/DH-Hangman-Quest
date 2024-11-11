@@ -11,10 +11,10 @@ class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
 
   @override
-  State<GameScreen> createState() => _GameScreenState();
+  State<GameScreen> createState() => GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> {
+class GameScreenState extends State<GameScreen> {
   var characters = "abcdefghijklmnñopqrstuvwxyz".toUpperCase();
   var word = palabrasCombinadas[Random().nextInt(palabrasCombinadas.length)].toUpperCase();
   List<String> selectedChar = [];
@@ -30,9 +30,8 @@ class _GameScreenState extends State<GameScreen> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      // ignore: deprecated_member_use
-      builder: (context) => WillPopScope(
-        onWillPop: () async => false,
+      builder: (context) => PopScope(
+        canPop: false,
          child: AlertDialog(
         title: const Text("¡Correcto!"),
         content: Text("La palabra es: $word"),
@@ -123,8 +122,8 @@ class _GameScreenState extends State<GameScreen> {
                                     showDialog(
                                       context: context,
                                       barrierDismissible: false,
-                                      builder: (context) => WillPopScope(
-                                        onWillPop: () async => false,
+                                      builder: (context) => PopScope(
+                                        canPop: false,
                                         child: AlertDialog(
                                         title: const Text("Ahogado"),
                                         content: const Text("No tienes más intentos."),

@@ -30,19 +30,32 @@ class HomeScreen extends StatelessWidget {
         title: const Text("Hangman-Quest"),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GameScreen()),
-            );
-          },
-          child: const Text(
-            "Jugar",
-             style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // Aquí se agrega la imagen
+            Image.asset(
+              'assets/ahorcado.png',  // Reemplaza con la ruta de tu imagen
+              width: 200,  // Ancho de la imagen
+              height: 200, // Alto de la imagen
+            ),
+              // Espacio entre la imagen y el botón
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const GameScreen()),
+                );
+              },
+              child: const Text(
+                "Jugar",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
