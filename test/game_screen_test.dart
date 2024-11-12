@@ -8,6 +8,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hangman/game_screen.dart';
 
+
 void main() {
   group('GameScreen Tests', () {
     test('Verifica si una palabra se ha adivinado completamente', () {
