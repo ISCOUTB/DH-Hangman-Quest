@@ -27,19 +27,21 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Hangman-Quest"),
+        title: const Text("Hangman-Quest",style: TextStyle(fontSize: 28,fontWeight: FontWeight.bold),),
       ),
-      body: Center(
-        child: Column(
+      body: SingleChildScrollView(
+        child: Container(
+          alignment:Alignment.center,
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Aquí se agrega la imagen
+            const SizedBox(height: 90),//espacio titulo-imagen
             Image.asset(
-              'assets/ahorcado.png',  // Reemplaza con la ruta de tu imagen
-              width: 200,  // Ancho de la imagen
-              height: 200, // Alto de la imagen
+              'assets/ahorcado.png',  
+              width: 300,  
+              height: 300, 
             ),
-              // Espacio entre la imagen y el botón
+                //sin espacio imagen-boton
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -54,8 +56,9 @@ class HomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
+            ), 
           ],
+        ),
         ),
       ),
     );

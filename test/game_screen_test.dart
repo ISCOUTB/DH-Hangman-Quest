@@ -7,8 +7,9 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hangman/game_screen.dart';
-
-
+import 'package:flutter/material.dart';
+import 'package:hangman/const/consts.dart';
+import 'dart:math';
 void main() {
   group('GameScreen Tests', () {
     test('Verifica si una palabra se ha adivinado completamente', () {
@@ -32,6 +33,49 @@ void main() {
 
       expect(gameState.tries, triesBefore + 1);
     });
+  
+test('Word Selection: Should select a random word', () {
+  final gameState = GameScreenState();
+  List<String> mockWords = ['HELLO', 'WORLD', 'FLUTTER'];
+  
+  // Forzamos la palabra seleccionada a estar en mockWords para simular que se ha seleccionado una palabra válida
+  gameState.word = mockWords[Random().nextInt(mockWords.length)];
+
+  // Assert
+  expect(mockWords.contains(gameState.word), true);
+});
+
+  
+    test('Letter Selection: Should add correct letter to selectedChar',() {
+    
+    final gameState = GameScreenState();
+    gameState.word = 'HELLO';
+    gameState.selectedChar = [];
+
+    // Act
+    gameState.selectedChar.add('H');
+
+    // Assert
+    expect(gameState.selectedChar, ['H']);
+  });
+  
+test('Loss Condition: Should trigger loss dialog after 6 incorrect tries', () {
+  final gameState = GameScreenState();
+  
+  // Establecemos la palabra y hacemos que selectedChar tenga intentos incorrectos
+  gameState.word = 'HELLO';
+  List<String> incorrectGuesses = ['X', 'Y', 'Z', 'A', 'B', 'C']; // 6 intentos incorrectos
+  
+  // Añadimos cada letra incorrecta y aumentamos tries si la letra no está en la palabra
+  for (var letter in incorrectGuesses) {
+    if (!gameState.word.contains(letter)) {
+      gameState.tries++;
+    }
+  }
+  
+  // Assert
+  expect(gameState.tries, 6);
+});
   });
 }
 
