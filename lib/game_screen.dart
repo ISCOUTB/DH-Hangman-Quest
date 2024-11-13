@@ -126,7 +126,7 @@ class GameScreenState extends State<GameScreen> {
                                         canPop: false,
                                         child: AlertDialog(
                                         title: const Text("Ahogado"),
-                                        content: const Text("No tienes más intentos."),
+                                        content: Text("La palabra era $word."),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
