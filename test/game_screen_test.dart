@@ -7,8 +7,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hangman/game_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:hangman/const/consts.dart';
 import 'dart:math';
 void main() {
   group('GameScreen Tests', () {
@@ -34,32 +32,33 @@ void main() {
       expect(gameState.tries, triesBefore + 1);
     });
   
-test('Word Selection: Should select a random word', () {
+test('Seleccion de palabra: se debe escoger una palabra aleatoria', () {
   final gameState = GameScreenState();
   List<String> mockWords = ['HELLO', 'WORLD', 'FLUTTER'];
   
-  // Forzamos la palabra seleccionada a estar en mockWords para simular que se ha seleccionado una palabra válida
+  // Forzamos la palabra seleccionada a estar en mockWords para simular que
+  // se ha seleccionado una palabra válida
   gameState.word = mockWords[Random().nextInt(mockWords.length)];
 
-  // Assert
+  
   expect(mockWords.contains(gameState.word), true);
 });
 
   
-    test('Letter Selection: Should add correct letter to selectedChar',() {
+    test('Seleccion de letra: Que se añada la letra si es correcta cuando es seleccionada',() {
     
     final gameState = GameScreenState();
     gameState.word = 'HELLO';
     gameState.selectedChar = [];
 
-    // Act
+    
     gameState.selectedChar.add('H');
 
-    // Assert
+  
     expect(gameState.selectedChar, ['H']);
   });
   
-test('Loss Condition: Should trigger loss dialog after 6 incorrect tries', () {
+test('Condicion de derrota: Deberia saltar el dialogo de derrota luego de 6 intesntos malos', () {
   final gameState = GameScreenState();
   
   // Establecemos la palabra y hacemos que selectedChar tenga intentos incorrectos
@@ -73,7 +72,7 @@ test('Loss Condition: Should trigger loss dialog after 6 incorrect tries', () {
     }
   }
   
-  // Assert
+  
   expect(gameState.tries, 6);
 });
   });
